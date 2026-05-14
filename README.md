@@ -1,12 +1,12 @@
 # chinese-thought-corpus-skill
 
-一个按照原仓库组织方式改造的 Claude Code skill，但内容已经改为三类中文思想材料的语料库：
+一个 Claude Code skill，面向三类中文思想材料的语料检索、对照阅读、观点归纳与写作辅助：
 
 1. 毛泽东选集 / 毛泽东著作
 2. 王阳明心学 / 传习录
 3. 曾国藩家书 / 书信材料
 
-仓库保留 `SKILL.md + references/ + data/ + scripts/ + config/` 的组织方式，方便后续继续扩充 corpus、生成索引、在 Claude Code 中按原典回答问题。
+仓库采用 `SKILL.md + references/ + data/ + scripts/ + config/` 的组织方式，方便后续继续扩充 corpus、生成索引、在 Claude Code 中按原典回答问题。
 
 ## 目录结构
 
@@ -16,7 +16,7 @@
 | `config/sources.yaml` | 可抓取来源 allowlist、许可说明、版权风险备注 |
 | `scripts/scraper.py` | 主抓取脚本：从 Wikisource / Marxists Internet Archive 等公开来源抓取材料 |
 | `scripts/build_references.py` | 从语料生成概念索引、来源索引、摘录索引和阅读流程 |
-| `scripts/check_repo.py` | 检查仓库是否仍残留旧 skill 关键词、JSON 是否有效、关键文件是否存在 |
+| `scripts/check_repo.py` | 检查仓库是否仍残留旧关键词、JSON 是否有效、关键文件是否存在 |
 | `references/` | 自动或半自动生成的阅读索引 |
 | `data/corpus/` | 抓取后的结构化语料；已提交一小批 seed corpus 方便先验证功能 |
 
@@ -82,7 +82,7 @@ python scripts/check_repo.py
 - 必要文件是否存在
 - `data/corpus/*.json` 是否可解析
 - 语料条目是否有 `title/source_url/text/license_note`
-- 是否残留旧 skill 关键词
+- 是否残留旧关键词
 
 ## 版权与来源说明
 
@@ -110,7 +110,3 @@ cp -r references ~/.claude/skills/chinese-thought-corpus/
 ## 重要限制
 
 这个仓库优先提供可复现的抓取与索引流程，而不是把版权不明的大体量文本直接塞进 Git。运行抓取脚本前，请确认你的使用场景、所在地法律和目标来源许可相容。
-
-## 特别鸣谢
-
-本项目的组织方式参考并改造自 [floodsung/floodsung-skill](https://github.com/floodsung/floodsung-skill)。感谢原项目提供了一个清晰的 `SKILL.md + references/ + data/ + scripts/` 组织范式。
