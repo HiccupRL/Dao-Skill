@@ -1,4 +1,4 @@
-# chinese-thought-corpus-skill
+# dao-corpus-skill
 
 一个 Claude Code skill，面向三类中文思想材料的语料检索、对照阅读、观点归纳与写作辅助：
 
