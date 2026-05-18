@@ -13,6 +13,7 @@ from corpus_lib import (
     CONCEPT_GRAPH_FILE,
     INDEX_DIR,
     REFERENCES_DIR,
+    citation_label,
     clean_text,
     configure_utf8_stdio,
     load_corpus,
@@ -53,7 +54,7 @@ def build_source_index(items: list[dict]) -> str:
     for collection, entries in grouped.items():
         lines.extend([f"## {COLLECTION_LABELS.get(collection, collection)} ({len(entries)})", ""])
         for item in sorted(entries, key=lambda x: (x["work"], x["title"])):
-            lines.append(f"- [{item['title']}]({item['source_url']}) — {item['author']} · {item['work']} · `{item['source_id']}`")
+            lines.append(f"- {citation_label(item)} — `{item['source_id']}` — {item['source_url']}")
         lines.append("")
     return "\n".join(lines)
 
@@ -62,7 +63,7 @@ def build_quote_index(items: list[dict]) -> str:
     grouped = defaultdict(list)
     for item in items:
         grouped[item["collection"]].append(item)
-    lines = ["# 代表性短摘录索引", "", "短摘录用于定位原文；正式引用前回到 source_url 核对上下文。", ""]
+    lines = ["# 代表性短摘录索引", "", "短摘录用于定位原文；正式引用前回到 corpus 原记录核对上下文。", ""]
     for collection, entries in grouped.items():
         lines.extend([f"## {COLLECTION_LABELS.get(collection, collection)}", ""])
         for item in sorted(entries, key=lambda x: (x["work"], x["title"]))[:120]:
@@ -72,7 +73,7 @@ def build_quote_index(items: list[dict]) -> str:
                     f"### {item['title']}",
                     f"- author: {item['author']}",
                     f"- work: {item['work']}",
-                    f"- source: {item['source_url']}",
+                    f"- citation: {citation_label(item)}",
                     f"- excerpt: {excerpt}...",
                     "",
                 ]
@@ -99,7 +100,7 @@ def build_core_concepts(items: list[dict], graph: dict) -> str:
             lines.append(f"### {COLLECTION_LABELS.get(collection, collection)}")
             for score, item in ranked[:5]:
                 snippet = make_snippet(item.get("text_clean", ""), terms)
-                lines.append(f"- [{item['title']}]({item['source_url']}) — score {score}：{snippet}")
+                lines.append(f"- {citation_label(item)} — score {score}：{snippet}")
             lines.append("")
     return "\n".join(lines)
 

@@ -13,6 +13,7 @@ from corpus_lib import (
     BM25,
     COLLECTIONS,
     CONCEPT_GRAPH_FILE,
+    citation_label,
     configure_utf8_stdio,
     load_corpus,
     make_snippet,
@@ -135,7 +136,8 @@ def retrieve(query: str, top_k: int = 12, require_collections: str = "", corpus_
             "work": item.get("work", ""),
             "title": item.get("title", ""),
             "section": item.get("section", ""),
-            "source": item.get("source_url", ""),
+            "citation": citation_label(item),
+            "source_url": item.get("source_url", ""),
             "score": score,
             "snippet": make_snippet(item.get("text_clean", ""), terms),
         }
@@ -191,7 +193,7 @@ def print_text(result: dict) -> None:
         print(f"    Author: {item['author']}")
         print(f"    Collection: {item['collection']}")
         print(f"    Work: {item['work']}")
-        print(f"    Source: {item['source']}")
+        print(f"    Citation: {item['citation']}")
         print(f"    Score: {item['score']:.3f}")
         print(f"    Snippet: {item['snippet']}\n")
 

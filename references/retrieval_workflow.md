@@ -8,7 +8,7 @@
 
 - 原文释义：定位单篇或单句。
 - 三家比较：强制三家覆盖。
-- 现实判断：需要原文证据、类比边界和行动建议。
+- 现实判断：需要先给足原文，再解释现实含义和行动建议。
 - AI/未来问题：不得直接搜索“AI”作为原典依据，先映射到传统概念。
 
 ## 2. 概念映射
@@ -39,7 +39,7 @@ python scripts/retrieve.py "问题文本" --require-collections all --top-k 12
 3. 对每家保留最低候选覆盖。
 4. 若安装了 `sentence-transformers` 且未禁用，则用 `DAO_SKILL_EMBED_MODEL` 做 embedding 重排。
 5. 对全文备选源轻微降权，优先使用更精确的卷、篇、书信条目。
-6. 输出作者、标题、作品、来源 URL 和片段。
+6. 输出作者、标题、作品、Citation 和片段；URL 只保留在 JSON 字段中。
 
 ## 4. 可选 embedding
 

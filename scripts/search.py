@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from corpus_lib import ALL_CORPUS_FILE, configure_utf8_stdio, load_corpus, make_snippet, normalise_for_search
+from corpus_lib import ALL_CORPUS_FILE, citation_label, configure_utf8_stdio, load_corpus, make_snippet, normalise_for_search
 from retrieve import retrieve
 
 
@@ -33,7 +33,8 @@ def legacy_search(keywords: list[str], collection: str | None, limit: int, mode:
                 "author": item.get("author", ""),
                 "work": item.get("work", ""),
                 "title": item.get("title", ""),
-                "source": item.get("source_url", "Unknown"),
+                "citation": citation_label(item),
+                "source_url": item.get("source_url", "Unknown"),
                 "snippet": make_snippet(item.get("text_clean", ""), terms),
                 "score": score,
             }
@@ -81,7 +82,7 @@ def main() -> None:
         print(f"    Author: {result['author']}")
         print(f"    Collection: {result['collection']}")
         print(f"    Work: {result['work']}")
-        print(f"    Source: {result['source']}")
+        print(f"    Citation: {result['citation']}")
         print(f"    Snippet: {result['snippet']}\n")
 
 

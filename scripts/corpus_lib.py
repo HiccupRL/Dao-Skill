@@ -366,3 +366,59 @@ def group_by_collection(items: Iterable[dict]) -> dict[str, list[dict]]:
     for item in items:
         grouped[item.get("collection", "")].append(item)
     return dict(grouped)
+
+
+MAO_URL_ARTICLES = {
+    "193612": "中国革命战争的战略问题",
+    "193707": "实践论",
+    "193708": "矛盾论",
+    "193805b": "论持久战",
+    "193805": "抗日游击战争的战略问题",
+    "19381012aa": "中国共产党在民族战争中的地位",
+    "19410519": "改造我们的学习",
+    "19420201": "整顿党的作风",
+    "194205": "在延安文艺座谈会上的讲话",
+    "19440412": "学习和时局",
+    "19450424": "论联合政府",
+    "19450424aa": "论联合政府",
+    "19560425": "论十大关系",
+    "19570227": "关于正确处理人民内部矛盾的问题",
+    "19570227AA": "关于正确处理人民内部矛盾的问题（讲话稿）",
+}
+
+
+def mao_article_from_url(source_url: str) -> str:
+    for marker, article in sorted(MAO_URL_ARTICLES.items(), key=lambda pair: len(pair[0]), reverse=True):
+        if marker in source_url:
+            return article
+    return ""
+
+
+def citation_label(item: dict) -> str:
+    author = normalise_space(item.get("author"))
+    collection = item.get("collection", "")
+    work = normalise_space(item.get("work"))
+    title = normalise_space(item.get("title"))
+    section = normalise_space(item.get("section"))
+
+    if collection == "wang_yangming":
+        if title.startswith("傳習錄/") or title.startswith("传习录/"):
+            section = section or title.split("/", 1)[1]
+            return f"{author}《傳習錄》{section}"
+        if title.startswith("傳習錄（") or title.startswith("传习录（"):
+            return f"{author}《傳習錄》全文备选"
+        return f"{author}《{title or work}》"
+
+    if collection == "zeng_guofan":
+        base = "曾国藩家书" if "家书" in work or "家書" in work else work or "曾国藩家书"
+        return f"{author}《{base}》{section or title}"
+
+    if collection == "maozedong":
+        article = mao_article_from_url(item.get("source_url", ""))
+        if article and title and article not in title:
+            return f"{author}《{article}》{title}"
+        return f"{author}《{title or article or work}》"
+
+    if section:
+        return f"{author}《{work or title}》{section}"
+    return f"{author}《{title or work}》"
